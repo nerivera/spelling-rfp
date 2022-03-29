@@ -8,6 +8,7 @@ public class Level {
 	
 	public Level(Word[] w, int lvl) {
 		words = new HashSet<Word>();
+		
 		for(int i = 0; i  < w.length; i++) {
 			words.add(w[i]);
 		}
@@ -17,6 +18,7 @@ public class Level {
 	
 	public void removeWord(Word word) {
 		boolean remove = words.remove(word);
+		
 		if(remove) {
 			//System.out.println(word.getWord() + " has been removed");
 		}
@@ -27,6 +29,7 @@ public class Level {
 	
 	public void addWord(Word word) {
 		boolean add = words.add(word);
+		
 		if(add) {
 			//System.out.println(word.getWord() + " has been added to the level");
 		} else {
