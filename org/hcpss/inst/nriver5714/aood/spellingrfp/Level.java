@@ -3,50 +3,57 @@ package org.hcpss.inst.nriver5714.aood.spellingrfp;
 import java.util.*;
 
 public class Level {
-	private final Set<Word> words;
+	private final Map<String, Word> words;
 	
-	public Level(Word[] w, int lvl) {
-		words = new HashSet<Word>();
+	public Level(Word[] w) {
+		words = new HashMap<String, Word>();
 		
 		for(int i = 0; i  < w.length; i++) {
-			words.add(w[i]);
+			words.put(w[i].getWord(), w[i]);
 		}
 	}
 	
+	public Level() {
+		words = new HashMap<String, Word>();
+	}
+	 
 	public void removeWord(Word word) {
-		boolean remove = words.remove(word);
+		boolean contains = words.containsKey(word.getWord());
 		
-		if(remove) {
-			//System.out.println(word.getWord() + " has been removed");
-		}
-		else {
-			//System.out.println(word.getWord() + " doesn't exist in this level");
+		if(contains) {
+			words.remove(word.getWord());
+			//System.out.println(word.getWord() + " has been removed!");
+		} else {
+			//System.out.printnln(word.getWord() + " doesn't exist in this level!");
 		}
 	}
 	
 	public void addWord(Word word) {
-		boolean add = words.add(word);
+		boolean contains = words.containsKey(word.getWord());
 		
-		if(add) {
-			//System.out.println(word.getWord() + " has been added to the level");
+		if (contains) {
+			//System.out.println(word.getWord() + " already exists in this level!");
 		} else {
-			//System.out.println(word.getWord() + " already exists within this level);
+			words.put(word.getWord(), word);
+			//System.out.println(word.getWord() + " has been added!");
 		}
 	}
 	
 	//change spelling of respective word
 	public void modifyWord(String word) {
-		Iterator<Word> i = words.iterator();
-		while (i.hasNext()) {
+		Iterator<Map.Entry<String, Word>> itr = words.entrySet().iterator();
+		
+		while(itr.hasNext()) {
 			
-			String wordReplaced = i.next().getWord().toLowerCase();
-			
-			if(wordReplaced.equals(word.toLowerCase())) {
-				Word w = new Word(word, i.next().getSentence());
-				words.remove(wordReplaced);
-				words.add(w);
+			Map.Entry<String, Word> entry = itr.next();
+			if(entry.getKey().equals(word)) {
+				
+				Word tempWord = new Word(word, entry.getValue().getSentence());
+				words.remove(entry.getKey());
+				words.put(word, tempWord);
 				break;
 			}
 		}
 	}
+	
 }
