@@ -8,6 +8,12 @@ public class User {
 	private int streak;
 	private BitSet recentResults;
 
+	public User(String name, int levelIndex) {
+		this.name = name;
+		this.levelIndex = levelIndex;
+		this.streak = 0;
+		this.recentResults = new BitSet();
+	}
 	public User(String name, int levelIndex, int streak, boolean[] recentResults) {
 		this.name = name;
 		this.levelIndex = levelIndex;
