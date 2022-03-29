@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Level {
 	private final Set<Word> words;
-	private int lvl;
 	
 	public Level(Word[] w, int lvl) {
 		words = new HashSet<Word>();
@@ -12,8 +11,6 @@ public class Level {
 		for(int i = 0; i  < w.length; i++) {
 			words.add(w[i]);
 		}
-		
-		this.lvl = lvl;
 	}
 	
 	public void removeWord(Word word) {
