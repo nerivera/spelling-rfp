@@ -19,14 +19,14 @@ public class Word {
 		return sentence;
 	}
 
-	public int[] getIncorrectPortion(String attempt) {
+	public SubstringRange getIncorrectPortion(String attempt) {
 		char[] a = this.getWord().toCharArray();
 		char[] b = attempt.toCharArray();
-		int[] c = new int[2];
+		int c = 0, d = 0;
 		
 		for (int i = 0; i < Math.max(a.length, b.length); i++) {
 			if(i >= a.length || a[i] != b[i]) {
-				c[0] = i;
+				c = i;
 				break;
 			} else if(i >= b.length) {
 				return null;
@@ -35,12 +35,11 @@ public class Word {
 		
 		for(int i = 1; i <= Math.max(a.length, b.length); i++) {
 			if(a[a.length - i] != b[b.length - i]) {
-				c[1] = i;
+				d = i;
 				break;
 			}
 		}
-
-		return c;
+		return new SubstringRange(c, d);
 	}
 
 	public boolean checkAttempt(String attempt) {
