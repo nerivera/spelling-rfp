@@ -36,6 +36,44 @@ public class Spelling extends JFrame implements ActionListener {
 		}
 
 	}
+	
+	class HomePage extends JPanel implements ActionListener {
+		JLabel lblWelcome, lblLevel;
+		JButton btnPractice, btnSettings;
+		
+		public HomePage() {
+		
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			//Temporary holder for user's name config.getUser("name")
+			lblWelcome = new JLabel("Welcome, User");
+			lblWelcome.setPreferredSize(new Dimension(100, 50));
+			this.add(lblWelcome);
+			//this.add(Box.createRigidArea(new Dimension(0, 60)));
+			
+			//Temporary holder for user's name config.getLevel(0)
+			lblLevel = new JLabel("Level: 1");
+			lblWelcome.setPreferredSize(new Dimension(50, 50));
+			this.add(lblWelcome);
+			this.add(Box.createRigidArea(new Dimension(0, 60)));
+			
+			btnPractice = new JButton("Start Practicing");
+			btnPractice.setPreferredSize(new Dimension(100, 100));
+			this.add(btnPractice);
+			this.add(Box.createRigidArea(new Dimension(0, 20)));
+			
+			btnSettings = new JButton("Settings");
+			
+			
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+	}
 
 	public Spelling() {
 
