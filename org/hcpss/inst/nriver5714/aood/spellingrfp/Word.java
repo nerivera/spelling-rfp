@@ -19,7 +19,7 @@ public class Word {
 		return sentence;
 	}
 
-	public SubstringRange getIncorrectPortion(String attempt) {
+	/*public SubstringRange getIncorrectPortion(String attempt) {
 		char[] a = this.getWord().toCharArray();
 		char[] b = attempt.toCharArray();
 		int c = 0, d = 0;
@@ -40,12 +40,17 @@ public class Word {
 			}
 		}
 		return new SubstringRange(c, d);
-	}
+	}*/
 
 	public boolean checkAttempt(String attempt) {
 		if (getWord().compareTo(attempt) == 0) {
 			return true;
 		}
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return word + ": " + sentence;
 	}
 }

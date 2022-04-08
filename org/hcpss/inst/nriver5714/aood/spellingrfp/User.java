@@ -14,6 +14,7 @@ public class User {
 		this.streak = 0;
 		this.recentResults = new BitSet();
 	}
+
 	public User(String name, int levelIndex, int streak, boolean[] recentResults) {
 		this.name = name;
 		this.levelIndex = levelIndex;
@@ -24,5 +25,10 @@ public class User {
 				this.recentResults.set(i);
 			}
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return String.format("%s (Level: %d, Streak: %d, Recent Results: %s)", this.name, this.levelIndex + 1, this.streak, this.recentResults);
 	}
 }
