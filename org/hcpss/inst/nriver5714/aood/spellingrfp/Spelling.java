@@ -8,7 +8,8 @@ import java.awt.event.*;
 public class Spelling extends JFrame implements ActionListener {
 
 	CardLayout layout;
-	Container c;
+	Container contentPane;
+	User currentUser;
 
 	// JButton b1, b2, b3;
 	class LoginPage extends JPanel implements ActionListener {
@@ -32,17 +33,84 @@ public class Spelling extends JFrame implements ActionListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
+			String name = text.getText().strip();
+			/*
+			if(Configuration.userExists(name) {
+				currentUser = Configuration.getUser(name);
+				layout.next(contentPane);
+			}
+			*/
+		}
 
+	}
+	class AgePrompt extends JPanel implements ActionListener {
+		private JButton b;
+		private JLabel l;
+		private JTextField text;
+		public AgePrompt() {
+			l = new JLabel("Please Enter Your Age");
+			l.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+			l.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			this.add(l);
+			text = new JTextField();
+			this.add(text);
+			b = new JButton("Submit");
+			b.setAlignmentX(JButton.CENTER_ALIGNMENT);
+			b.addActionListener(this);
+			this.add(b);
+		}
+		public void actionPerformed(ActionEvent e) {
+			String age = text.getText().strip();
+			
+		}
+	}
+	
+	class HomePage extends JPanel implements ActionListener {
+		JLabel lblWelcome, lblLevel;
+		JButton btnPractice, btnSettings;
+		
+		public HomePage() {
+		
+			this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+			//Temporary holder for user's name config.getUser("name")
+			lblWelcome = new JLabel("Welcome, User");
+			lblWelcome.setPreferredSize(new Dimension(100, 50));
+			this.add(lblWelcome);
+			//this.add(Box.createRigidArea(new Dimension(0, 60)));
+			
+			//Temporary holder for user's name config.getLevel(0)
+			lblLevel = new JLabel("Level: 1");
+			lblWelcome.setPreferredSize(new Dimension(50, 50));
+			this.add(lblWelcome);
+			this.add(Box.createRigidArea(new Dimension(0, 60)));
+			
+			btnPractice = new JButton("Start Practicing");
+			btnPractice.setPreferredSize(new Dimension(100, 100));
+			this.add(btnPractice);
+			this.add(Box.createRigidArea(new Dimension(0, 20)));
+			
+			btnSettings = new JButton("Settings");
+			
+			
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
 		}
 
 	}
 
+
+	
 	public Spelling() {
 
-		c = getContentPane();
+		contentPane = getContentPane();
 		layout = new CardLayout(40, 30);
 
-		c.setLayout(layout);
+		contentPane.setLayout(layout);
 		/*
 		 * b1 = new JButton("Login Page"); b2 = new JButton("Practice"); b3 = new
 		 * JButton("Settings");
@@ -67,7 +135,7 @@ public class Spelling extends JFrame implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		layout.next(c);
+		layout.next(contentPane);
 
 	}
 
