@@ -56,4 +56,9 @@ public class Level {
 		}
 	}
 	
+	@Override
+	public String toString() {
+		return words.values().toString();
+	}
+	
 }
