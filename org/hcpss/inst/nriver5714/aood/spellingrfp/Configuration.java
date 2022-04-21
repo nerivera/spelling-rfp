@@ -63,11 +63,11 @@ public class Configuration {
 
 	}
 
-	public static void load() throws FileNotFoundException {
-		load(Constants.DEFAULT_CONFIG_FILE_PATH);
+	public static void load(Runnable callback) throws FileNotFoundException {
+		load(Constants.DEFAULT_CONFIG_FILE_PATH, callback);
 	}
 
-	public static void load(String configFilePath) throws FileNotFoundException {
+	public static void load(String configFilePath, Runnable callback) throws FileNotFoundException {
 		if (loadState == LoadState.LOADING)
 			throw new LoadPendingException();
 		if (loadState == LoadState.LOADED)
@@ -101,6 +101,7 @@ public class Configuration {
 			if (users.size() == usersArray.length()) {
 				if (forEachCompleted.getAndSet(true)) {
 					loadState = LoadState.LOADED;
+					callback.run();
 				}
 			}
 		});
@@ -124,8 +125,10 @@ public class Configuration {
 			var level = new Level(words);
 			levels.add(level);
 			if (levels.size() == levelsArray.length()) {
-				if (forEachCompleted.getAndSet(true))
+				if (forEachCompleted.getAndSet(true)) {
 					loadState = LoadState.LOADED;
+					callback.run();
+				}		
 			}
 		});
 	}
