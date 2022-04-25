@@ -21,11 +21,14 @@ public class Spelling extends JFrame implements ActionListener {
 		private JTextField text;
 
 		public LoginPage() {
+			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			l = new JLabel("Please Enter In Your Name");
 			l.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-			l.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			l.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 			this.add(l);
 			text = new JTextField();
+			text.setMaximumSize(new Dimension(Integer.MAX_VALUE, text.getMinimumSize().height));
+			text.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 			this.add(text);
 			b = new JButton("Login");
 			b.setAlignmentX(JButton.CENTER_ALIGNMENT);
@@ -52,11 +55,13 @@ public class Spelling extends JFrame implements ActionListener {
 		private JTextField text;
 
 		public AgePrompt() {
+			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			l = new JLabel("Please Enter Your Age");
 			l.setAlignmentX(JLabel.CENTER_ALIGNMENT);
-			l.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+			l.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
 			this.add(l);
 			text = new JTextField();
+			text.setMaximumSize(new Dimension(Integer.MAX_VALUE, text.getMinimumSize().height));
 			this.add(text);
 			b = new JButton("Submit");
 			b.setAlignmentX(JButton.CENTER_ALIGNMENT);
@@ -77,27 +82,30 @@ public class Spelling extends JFrame implements ActionListener {
 		private JTextField text;
 
 		public Practice() {
+			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			b1 = new JButton("Quit Practice");
-			b1.setAlignmentX(LEFT_ALIGNMENT);
+			b1.setAlignmentX(JButton.LEFT_ALIGNMENT);
+			b1.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			b1.addActionListener(this);
 			this.add(b1);
 			l = new JLabel("User, level");
-			l.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+			l.setAlignmentY(JLabel.CENTER_ALIGNMENT);
 			l.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			this.add(l);
-			soundIcon = new JLabel(new ImageIcon("src/soundIcon"));
-			soundIcon.setAlignmentX(CENTER_ALIGNMENT);
-			this.add(soundIcon);
+			//soundIcon = new JLabel(new ImageIcon("src/soundIcon"));
+			//soundIcon.setAlignmentX(CENTER_ALIGNMENT);
+			//this.add(soundIcon);
 			text = new JTextField();
+			text.setMaximumSize(new Dimension(Integer.MAX_VALUE, text.getMinimumSize().height));
 			this.add(text);
 			b2 = new JButton("Give Up");
-			b2.setAlignmentX(JButton.LEFT_ALIGNMENT);
-			b2.setAlignmentY(JButton.BOTTOM_ALIGNMENT);
+			b2.setAlignmentY(JButton.LEFT_ALIGNMENT);
+			b2.setAlignmentX(JButton.BOTTOM_ALIGNMENT);
 			b2.addActionListener(this);
 			this.add(b2);
 			b3 = new JButton("Submit");
-			b3.setAlignmentX(RIGHT_ALIGNMENT);
-			b3.setAlignmentY(BOTTOM_ALIGNMENT);
+			b3.setAlignmentY(JButton.RIGHT_ALIGNMENT);
+			b3.setAlignmentX(JButton.BOTTOM_ALIGNMENT);
 			b3.addActionListener(this);
 			this.add(b3);
 		}
@@ -112,25 +120,28 @@ public class Spelling extends JFrame implements ActionListener {
 
 		private static final long serialVersionUID = -1972509954050125796L;
 		private JButton b1, b2;
-		private JLabel l, background;
-		private JTextField text;
+		private JLabel l, background, c;
+
 
 		public CorrectAnswer() {
+			this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 			b1 = new JButton("Quit Practice");
-			b1.setAlignmentX(LEFT_ALIGNMENT);
+			//b1.setAlignmentX(JButton.LEFT_ALIGNMENT);
 			b1.addActionListener(this);
 			this.add(b1);
 			l = new JLabel("User, level");
-			l.setAlignmentX(JLabel.CENTER_ALIGNMENT);
+			//l.setAlignmentX(JLabel.CENTER);
 			l.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 			this.add(l);
+			c = new JLabel("Good Job");
+			c.setBorder(BorderFactory.createEmptyBorder(40, 40, 40, 40));
+			this.add(c);
 			background = new JLabel(new ImageIcon("src/confetti"));
-			background.setAlignmentX(CENTER_ALIGNMENT);
+			//background.setAlignmentX(CENTER_ALIGNMENT);
 			this.add(background);
-			text = new JTextField();
-			this.add(text);
+			
 			b2 = new JButton("Continue");
-			b2.setAlignmentX(CENTER_ALIGNMENT);
+			//b2.setAlignmentX(CENTER_ALIGNMENT);
 			b2.addActionListener(this);
 			this.add(b2);
 		}
@@ -321,7 +332,7 @@ public class Spelling extends JFrame implements ActionListener {
 		layout = new CardLayout(10, 20);
 
 		contentPane.setLayout(layout);
-		home = new SettingsPage();
+		home = new CorrectAnswer();
 		contentPane.add(home, "1");
 		/*
 		 * b1 = new JButton("Login Page"); b2 = new JButton("Practice"); b3 = new
