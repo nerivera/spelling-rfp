@@ -255,6 +255,45 @@ public class Spelling extends JFrame implements ActionListener {
 
 		}
 	}
+	
+	class CompletePractice extends JPanel implements ActionListener {
+	    JLabel user, completePractice, score;
+	    JButton btnHome;
+	    
+	    CompletePractice() {
+	      BoxLayout boxlayout = new BoxLayout(this, BoxLayout.Y_AXIS);
+	      this.setLayout(boxlayout);
+
+	      //retrieve username and level from Configuration class
+	      user = new JLabel("TEMPORARY, Level: Temp");
+	      user.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      user.setFont(new Font("Comfortaa", Font.PLAIN, 15));
+	      this.add(user);
+	      this.add(Box.createVerticalStrut(70));
+
+	      completePractice = new JLabel("Practice Complete!");
+	      completePractice.setFont(new Font("Comfortaa", Font.BOLD, 20));
+	      completePractice.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      this.add(completePractice);
+	      this.add(Box.createVerticalStrut(10));
+
+	      //calculate score
+	      score = new JLabel("Score: temp");
+	      score.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      this.add(score);
+	      this.add(Box.createVerticalStrut(80));
+
+	      
+	      btnHome = new JButton("Back to Home");
+	      btnHome.setMaximumSize(new Dimension(200, 50));
+	      btnHome.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      this.add(btnHome);
+	    }
+
+	    public void actionPerformed(ActionEvent e) {
+
+	    }
+	  }
 
 	class HomePage extends JPanel implements ActionListener {
 		JLabel lblWelcome, lblLevel;
@@ -462,7 +501,7 @@ public class Spelling extends JFrame implements ActionListener {
 		layout = new CardLayout(10, 20);
 
 		contentPane.setLayout(layout);
-		home = new SettingsPage();
+		home = new CompletePractice();
 		System.out.println("Finished IncorrectAnswer constructor");
 		contentPane.add(home, "1");
 		/*
