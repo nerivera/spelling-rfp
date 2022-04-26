@@ -323,7 +323,7 @@ public class Spelling extends JFrame implements ActionListener {
 			this.add(topPanel);
 	
 			middlePanel = new JPanel();
-			topPanel.add(Box.createHorizontalStrut(30));
+			this.add(Box.createHorizontalStrut(30));
 			middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 			chooseLevel = new JLabel("Choose a level: ");
 			chooseLevel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -376,7 +376,7 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel.add(user);
 			topPanel.add(Box.createHorizontalStrut(30));
 			this.add(topPanel);
-			this.add(Box.createRigidArea(new Dimension(0, 30)));
+			this.add(Box.createHorizontalStrut(30));
 
 			middlePanel = new JPanel();
 			middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
@@ -462,7 +462,7 @@ public class Spelling extends JFrame implements ActionListener {
 		layout = new CardLayout(10, 20);
 
 		contentPane.setLayout(layout);
-		home = new Practice();
+		home = new SettingsPage();
 		System.out.println("Finished IncorrectAnswer constructor");
 		contentPane.add(home, "1");
 		/*
