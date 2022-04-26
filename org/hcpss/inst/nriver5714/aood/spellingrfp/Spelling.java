@@ -317,13 +317,13 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel.add(Box.createHorizontalStrut(30));
 
 			// Use Configuration class to retrieve name and level
-			user = new JLabel("John, Level 6");
+			user = new JLabel("TEMPORARY, Level Temp");
 			topPanel.add(user);
 			topPanel.add(Box.createHorizontalStrut(50));
 			this.add(topPanel);
-			this.add(Box.createRigidArea(new Dimension(0, 70)));
-
+	
 			middlePanel = new JPanel();
+			topPanel.add(Box.createHorizontalStrut(30));
 			middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
 			chooseLevel = new JLabel("Choose a level: ");
 			chooseLevel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -333,7 +333,7 @@ public class Spelling extends JFrame implements ActionListener {
 			levels = new JComboBox(l);
 			middlePanel.add(levels);
 			this.add(middlePanel);
-			this.add(Box.createRigidArea(new Dimension(0, 70)));
+			this.add(Box.createRigidArea(new Dimension(0, 90)));
 
 			bottomPanel = new JPanel(new GridLayout(2, 2, 10, 10));
 			modifyLevel = new JButton("Modify Level");
@@ -462,7 +462,7 @@ public class Spelling extends JFrame implements ActionListener {
 		layout = new CardLayout(10, 20);
 
 		contentPane.setLayout(layout);
-		home = new SettingsPage();
+		home = new Practice();
 		System.out.println("Finished IncorrectAnswer constructor");
 		contentPane.add(home, "1");
 		/*
