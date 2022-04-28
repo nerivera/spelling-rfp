@@ -10,7 +10,13 @@ public class Spelling extends JFrame implements ActionListener {
 	CardLayout layout;
 	Container contentPane;
 	User currentUser;
+	String tempUserName;
+	JPanel login;
+	JPanel age;
 	JPanel home;
+	JPanel practice;
+	JPanel correct;
+	JPanel incorrect;
 
 	// JButton b1, b2, b3;
 	class LoginPage extends JPanel implements ActionListener {
@@ -37,15 +43,22 @@ public class Spelling extends JFrame implements ActionListener {
 
 			btnLogin = new JButton("Login");
 			btnLogin.setAlignmentX(Component.CENTER_ALIGNMENT);
+			btnLogin.addActionListener(this);
+			btnLogin.setActionCommand("login");
 			this.add(btnLogin);
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			/*
-			 * String name = text.getText().strip(); if (Configuration.userExists(name)) {
-			 * currentUser = Configuration.getUser(name).orElseThrow(); }
-			 */
+
+			String name = txtName.getText().strip();
+			if (Configuration.userExists(name)) {
+				currentUser = Configuration.getUser(name).orElseThrow();
+				layout.show(contentPane, "home");
+			} else {
+				layout.show(contentPane, "age");
+			}
+
 		}
 	}
 
@@ -73,13 +86,20 @@ public class Spelling extends JFrame implements ActionListener {
 
 			btnSubmit = new JButton("Submit");
 			btnSubmit.setAlignmentX(Component.CENTER_ALIGNMENT);
+			btnSubmit.addActionListener(this);
+			btnSubmit.setActionCommand("submit");
 			this.add(btnSubmit);
 		}
 
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-			// String age = text.getText().strip();
+			String age = txtAge.getText().strip();
+			try {
+				currentUser = Configuration.createUser(tempUserName, Integer.parseInt(age));
+				layout.show(contentPane, "home");
+			} catch (NumberFormatException ignored) {
 
+			}
 		}
 	}
 
@@ -94,6 +114,8 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
+			btnQuit.addActionListener(this);
+			btnQuit.setActionCommand("quit");
 			topPanel.add(btnQuit);
 			topPanel.add(Box.createHorizontalStrut(50));
 
@@ -139,7 +161,10 @@ public class Spelling extends JFrame implements ActionListener {
 
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
-
+			switch (e.getActionCommand()) {
+			case "quit":
+				layout.show(contentPane, "home");
+			}
 		}
 	}
 
@@ -501,9 +526,19 @@ public class Spelling extends JFrame implements ActionListener {
 		layout = new CardLayout(10, 20);
 
 		contentPane.setLayout(layout);
-		home = new CompletePractice();
-		System.out.println("Finished IncorrectAnswer constructor");
-		contentPane.add(home, "1");
+		login = new LoginPage();
+		contentPane.add(login, "login");
+		age = new AgePrompt();
+		contentPane.add(age, "age");
+		home = new HomePage();
+		contentPane.add(home, "home");
+		practice = new Practice();
+		contentPane.add(practice, "practice");
+		correct = new CorrectAnswer();
+		contentPane.add(correct, "correct");
+		incorrect = new IncorrectAnswer();
+		contentPane.add(incorrect, "incorrect");
+		layout.show(contentPane, "login");
 		/*
 		 * b1 = new JButton("Login Page"); b2 = new JButton("Practice"); b3 = new
 		 * JButton("Settings");

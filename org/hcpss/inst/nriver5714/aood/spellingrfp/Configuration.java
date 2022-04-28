@@ -128,7 +128,7 @@ public class Configuration {
 				if (forEachCompleted.getAndSet(true)) {
 					loadState = LoadState.LOADED;
 					callback.run();
-				}		
+				}
 			}
 		});
 	}
@@ -155,15 +155,16 @@ public class Configuration {
 		return Optional.ofNullable(users.get(name));
 	}
 
-	public static void createUser(String name, int age) {
+	public static User createUser(String name, int age) {
 		if (loadState == LoadState.NOT_LOADED)
 			throw new NotYetLoadedException();
 		if (loadState == LoadState.LOADING)
 			throw new LoadPendingException();
 		if (users.containsKey(name))
 			throw new UserAlreadyExistsException(name);
-
-		users.put(name, new User(name, Constants.AGE_TO_LEVEL_INDEX.applyAsInt(age)));
+		User user = new User(name, Constants.AGE_TO_LEVEL_INDEX.applyAsInt(age));
+		users.put(name, user);
+		return user;
 	}
 
 	public static Level getLevel(int levelIndex) {
