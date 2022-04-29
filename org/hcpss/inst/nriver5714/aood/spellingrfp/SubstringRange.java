@@ -20,4 +20,8 @@ public class SubstringRange {
 	public int getEndIndex() {
 		return this.endIndex;
 	}
+	@Override
+	public String toString() {
+		return "[" + (isEmpty() ? "" : beginIndex + ", " + endIndex) + "]";
+	}
 }

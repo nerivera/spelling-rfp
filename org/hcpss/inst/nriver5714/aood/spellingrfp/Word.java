@@ -19,28 +19,31 @@ public class Word {
 		return sentence;
 	}
 
-	/*public SubstringRange getIncorrectPortion(String attempt) {
+	public SubstringRange getIncorrectPortion(String attempt) {
 		char[] a = this.getWord().toCharArray();
 		char[] b = attempt.toCharArray();
-		int c = 0, d = 0;
-		
+		int c = -1, d = -1;
+
 		for (int i = 0; i < Math.max(a.length, b.length); i++) {
-			if(i >= a.length || a[i] != b[i]) {
+			if (i >= b.length) {
+				return new SubstringRange();
+			} else if (i >= a.length || a[i] != b[i]) {
 				c = i;
 				break;
-			} else if(i >= b.length) {
-				return null;
 			}
 		}
-		
-		for(int i = 1; i <= Math.max(a.length, b.length); i++) {
-			if(a[a.length - i] != b[b.length - i]) {
-				d = i;
+		//b.length check before comparison
+		for (int i = 1; i <= Math.max(a.length, b.length); i++) {
+			if (i > b.length) {
+				return new SubstringRange();
+			}else if(i > a.length || a[a.length - i] != b[b.length - i]) {
+				d = b.length - i;
 				break;
 			}
+	
 		}
 		return new SubstringRange(c, d);
-	}*/
+	}
 
 	public boolean checkAttempt(String attempt) {
 		if (getWord().compareTo(attempt) == 0) {
@@ -48,7 +51,7 @@ public class Word {
 		}
 		return false;
 	}
-	
+
 	@Override
 	public String toString() {
 		return word + ": " + sentence;
