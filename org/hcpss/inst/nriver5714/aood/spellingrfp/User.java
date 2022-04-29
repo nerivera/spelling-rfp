@@ -26,7 +26,15 @@ public class User {
 			}
 		}
 	}
-	
+	public String getName() {
+		return name;
+	}
+	public int getLevelIndex() {
+		return levelIndex;
+	}
+	public Level getLevel() {
+		return Configuration.getLevel(getLevelIndex());
+	}
 	@Override
 	public String toString() {
 		return String.format("%s (Level: %d, Streak: %d, Recent Results: %s)", this.name, this.levelIndex + 1, this.streak, this.recentResults);

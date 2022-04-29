@@ -17,6 +17,8 @@ public class Spelling extends JFrame implements ActionListener {
 	JPanel practice;
 	JPanel correct;
 	JPanel incorrect;
+	Word word;
+	String guess;
 
 	// JButton b1, b2, b3;
 	class LoginPage extends JPanel implements ActionListener {
@@ -111,6 +113,9 @@ public class Spelling extends JFrame implements ActionListener {
 		JPanel topPanel, midPanel, btmPanel;
 
 		public Practice() {
+			Level level = currentUser.getLevel();
+			word = level.getNextWord();
+
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
@@ -119,8 +124,7 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel.add(btnQuit);
 			topPanel.add(Box.createHorizontalStrut(50));
 
-			// Retrieve username and level from Configuration class
-			user = new JLabel("TEMPORARY, Level: Temp");
+			user = new JLabel(currentUser.getName() + ", Level " + (currentUser.getLevelIndex() + 1));
 			topPanel.add(user);
 			this.add(topPanel);
 
@@ -155,6 +159,8 @@ public class Spelling extends JFrame implements ActionListener {
 
 			btmPanel.add(Box.createHorizontalStrut(70));
 			btnSubmit = new JButton("Submit");
+			btnSubmit.addActionListener(this);
+			btnSubmit.setActionCommand("submit");
 			btmPanel.add(btnSubmit);
 			this.add(btmPanel);
 		}
@@ -164,6 +170,13 @@ public class Spelling extends JFrame implements ActionListener {
 			switch (e.getActionCommand()) {
 			case "quit":
 				layout.show(contentPane, "home");
+			case "submit":
+				guess = enterSpelling.getText().strip().toLowerCase();
+				if (guess.equalsIgnoreCase(word.getWord())) {
+					layout.show(contentPane, "correct");
+				} else {
+					layout.show(contentPane, "incorrect");
+				}
 			}
 		}
 	}
@@ -236,8 +249,10 @@ public class Spelling extends JFrame implements ActionListener {
 			notQuite.setFont(new Font("Comfortaa", Font.BOLD, 15));
 			midPanel.add(notQuite);
 
-			// Retrieve the text from textfield and display errors
-			spellingAttempt = new JLabel("TEMPORARY");
+			SubstringRange incorrectPortion = word.getIncorrectPortion(guess);
+			spellingAttempt = new JLabel("<html>" + guess.substring(0, incorrectPortion.getBeginIndex()) + "<u>"
+					+ guess.substring(incorrectPortion.getBeginIndex(), incorrectPortion.getEndIndex()) + "</u>"
+					+ guess.substring(incorrectPortion.getEndIndex()) + "</html>");
 			spellingAttempt.setForeground(Color.RED);
 			spellingAttempt.setAlignmentX(Component.CENTER_ALIGNMENT);
 			midPanel.add(spellingAttempt);
@@ -280,45 +295,44 @@ public class Spelling extends JFrame implements ActionListener {
 
 		}
 	}
-	
+
 	class CompletePractice extends JPanel implements ActionListener {
-	    JLabel user, completePractice, score;
-	    JButton btnHome;
-	    
-	    CompletePractice() {
-	      BoxLayout boxlayout = new BoxLayout(this, BoxLayout.Y_AXIS);
-	      this.setLayout(boxlayout);
+		JLabel user, completePractice, score;
+		JButton btnHome;
 
-	      //retrieve username and level from Configuration class
-	      user = new JLabel("TEMPORARY, Level: Temp");
-	      user.setAlignmentX(Component.CENTER_ALIGNMENT);
-	      user.setFont(new Font("Comfortaa", Font.PLAIN, 15));
-	      this.add(user);
-	      this.add(Box.createVerticalStrut(70));
+		CompletePractice() {
+			BoxLayout boxlayout = new BoxLayout(this, BoxLayout.Y_AXIS);
+			this.setLayout(boxlayout);
 
-	      completePractice = new JLabel("Practice Complete!");
-	      completePractice.setFont(new Font("Comfortaa", Font.BOLD, 20));
-	      completePractice.setAlignmentX(Component.CENTER_ALIGNMENT);
-	      this.add(completePractice);
-	      this.add(Box.createVerticalStrut(10));
+			// retrieve username and level from Configuration class
+			user = new JLabel("TEMPORARY, Level: Temp");
+			user.setAlignmentX(Component.CENTER_ALIGNMENT);
+			user.setFont(new Font("Comfortaa", Font.PLAIN, 15));
+			this.add(user);
+			this.add(Box.createVerticalStrut(70));
 
-	      //calculate score
-	      score = new JLabel("Score: temp");
-	      score.setAlignmentX(Component.CENTER_ALIGNMENT);
-	      this.add(score);
-	      this.add(Box.createVerticalStrut(80));
+			completePractice = new JLabel("Practice Complete!");
+			completePractice.setFont(new Font("Comfortaa", Font.BOLD, 20));
+			completePractice.setAlignmentX(Component.CENTER_ALIGNMENT);
+			this.add(completePractice);
+			this.add(Box.createVerticalStrut(10));
 
-	      
-	      btnHome = new JButton("Back to Home");
-	      btnHome.setMaximumSize(new Dimension(200, 50));
-	      btnHome.setAlignmentX(Component.CENTER_ALIGNMENT);
-	      this.add(btnHome);
-	    }
+			// calculate score
+			score = new JLabel("Score: temp");
+			score.setAlignmentX(Component.CENTER_ALIGNMENT);
+			this.add(score);
+			this.add(Box.createVerticalStrut(80));
 
-	    public void actionPerformed(ActionEvent e) {
+			btnHome = new JButton("Back to Home");
+			btnHome.setMaximumSize(new Dimension(200, 50));
+			btnHome.setAlignmentX(Component.CENTER_ALIGNMENT);
+			this.add(btnHome);
+		}
 
-	    }
-	  }
+		public void actionPerformed(ActionEvent e) {
+
+		}
+	}
 
 	class HomePage extends JPanel implements ActionListener {
 		JLabel lblWelcome, lblLevel;
@@ -342,6 +356,8 @@ public class Spelling extends JFrame implements ActionListener {
 			this.add(Box.createVerticalStrut(100));
 
 			btnPractice = new JButton("Start Practicing");
+			btnPractice.addActionListener(this);
+			btnPractice.setActionCommand("start");
 			btnPractice.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnPractice.setFont(new Font("Comfortaa", Font.PLAIN, 20));
 			btnPractice.setMaximumSize(new Dimension(250, 100));
@@ -360,7 +376,10 @@ public class Spelling extends JFrame implements ActionListener {
 			 * layout.show(contentPane, indexOfPanel) indexOfPanel refers to the panel at
 			 * the position of the specified index
 			 */
-
+			switch (e.getActionCommand()) {
+			case "start":
+				layout.show(contentPane, "practice");
+			}
 		}
 
 	}
@@ -385,7 +404,7 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel.add(user);
 			topPanel.add(Box.createHorizontalStrut(50));
 			this.add(topPanel);
-	
+
 			middlePanel = new JPanel();
 			this.add(Box.createHorizontalStrut(30));
 			middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));

@@ -37,7 +37,7 @@ public class Word {
 			if (i > b.length) {
 				return new SubstringRange();
 			}else if(i > a.length || a[a.length - i] != b[b.length - i]) {
-				d = b.length - i;
+				d = b.length - i + 1;
 				break;
 			}
 	

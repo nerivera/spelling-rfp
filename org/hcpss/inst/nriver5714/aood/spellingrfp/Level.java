@@ -55,6 +55,14 @@ public class Level {
 			}
 		}
 	}
+	public Word getNextWord() {
+		int randomIndex = (int)(Math.random() * words.size());
+		Iterator<Word> it = words.values().iterator();
+		for(int i = 0; i < randomIndex; i++) {
+			it.next();
+		}
+		return it.next();
+	}
 	
 	@Override
 	public String toString() {
