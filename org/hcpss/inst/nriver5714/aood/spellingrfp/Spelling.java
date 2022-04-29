@@ -56,6 +56,7 @@ public class Spelling extends JFrame implements ActionListener {
 			String name = txtName.getText().strip();
 			if (Configuration.userExists(name)) {
 				currentUser = Configuration.getUser(name).orElseThrow();
+				initializeUserDependentPages();
 				layout.show(contentPane, "home");
 			} else {
 				layout.show(contentPane, "age");
@@ -98,6 +99,7 @@ public class Spelling extends JFrame implements ActionListener {
 			String age = txtAge.getText().strip();
 			try {
 				currentUser = Configuration.createUser(tempUserName, Integer.parseInt(age));
+				initializeUserDependentPages();
 				layout.show(contentPane, "home");
 			} catch (NumberFormatException ignored) {
 
@@ -165,11 +167,18 @@ public class Spelling extends JFrame implements ActionListener {
 			this.add(btmPanel);
 		}
 
+		public void showNextWord() {
+			Level level = currentUser.getLevel();
+			word = level.getNextWord();
+			user.setText(currentUser.getName() + ", Level " + (currentUser.getLevelIndex() + 1));
+		}
+
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			switch (e.getActionCommand()) {
 			case "quit":
 				layout.show(contentPane, "home");
+				break;
 			case "submit":
 				guess = enterSpelling.getText().strip().toLowerCase();
 				if (guess.equalsIgnoreCase(word.getWord())) {
@@ -177,6 +186,8 @@ public class Spelling extends JFrame implements ActionListener {
 				} else {
 					layout.show(contentPane, "incorrect");
 				}
+				showNextWord();
+				break;
 			}
 		}
 	}
@@ -230,7 +241,6 @@ public class Spelling extends JFrame implements ActionListener {
 		JPanel topPanel, midPanel, btmPanel;
 
 		public IncorrectAnswer() {
-			System.out.println("Entered IncorrectAnswer constructor");
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
@@ -249,10 +259,11 @@ public class Spelling extends JFrame implements ActionListener {
 			notQuite.setFont(new Font("Comfortaa", Font.BOLD, 15));
 			midPanel.add(notQuite);
 
-			SubstringRange incorrectPortion = word.getIncorrectPortion(guess);
-			spellingAttempt = new JLabel("<html>" + guess.substring(0, incorrectPortion.getBeginIndex()) + "<u>"
+			// TODO make this thing happen in method called when guess is submitted
+			//SubstringRange incorrectPortion = word.getIncorrectPortion(guess);
+			spellingAttempt = new JLabel(/*"<html>" + guess.substring(0, incorrectPortion.getBeginIndex()) + "<u>"
 					+ guess.substring(incorrectPortion.getBeginIndex(), incorrectPortion.getEndIndex()) + "</u>"
-					+ guess.substring(incorrectPortion.getEndIndex()) + "</html>");
+					+ guess.substring(incorrectPortion.getEndIndex()) + "</html>"*/);
 			spellingAttempt.setForeground(Color.RED);
 			spellingAttempt.setAlignmentX(Component.CENTER_ALIGNMENT);
 			midPanel.add(spellingAttempt);
@@ -549,14 +560,6 @@ public class Spelling extends JFrame implements ActionListener {
 		contentPane.add(login, "login");
 		age = new AgePrompt();
 		contentPane.add(age, "age");
-		home = new HomePage();
-		contentPane.add(home, "home");
-		practice = new Practice();
-		contentPane.add(practice, "practice");
-		correct = new CorrectAnswer();
-		contentPane.add(correct, "correct");
-		incorrect = new IncorrectAnswer();
-		contentPane.add(incorrect, "incorrect");
 		layout.show(contentPane, "login");
 		/*
 		 * b1 = new JButton("Login Page"); b2 = new JButton("Practice"); b3 = new
@@ -572,10 +575,19 @@ public class Spelling extends JFrame implements ActionListener {
 
 	}
 
+	public void initializeUserDependentPages() {
+		home = new HomePage();
+		contentPane.add(home, "home");
+		practice = new Practice();
+		contentPane.add(practice, "practice");
+		correct = new CorrectAnswer();
+		contentPane.add(correct, "correct");
+		incorrect = new IncorrectAnswer();
+		contentPane.add(incorrect, "incorrect");
+	}
+
 	public static void runGUI() {
-		System.out.println("Enter runGUI");
 		Spelling cl = new Spelling();
-		System.out.println("Finished Spelling constructor");
 		cl.setSize(400, 400);
 		cl.setVisible(true);
 		cl.setDefaultCloseOperation(EXIT_ON_CLOSE);

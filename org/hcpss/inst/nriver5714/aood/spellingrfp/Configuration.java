@@ -97,7 +97,7 @@ public class Configuration {
 			}
 
 			var user = new User(name, levelIndex, streak, recentResults);
-			users.put(name, user);
+			users.put(name.toLowerCase(), user);
 			if (users.size() == usersArray.length()) {
 				if (forEachCompleted.getAndSet(true)) {
 					loadState = LoadState.LOADED;
@@ -143,7 +143,7 @@ public class Configuration {
 		if (loadState == LoadState.LOADING)
 			throw new LoadPendingException();
 
-		return users.containsKey(name);
+		return users.containsKey(name.toLowerCase());
 	}
 
 	public static Optional<User> getUser(String name) {
@@ -152,7 +152,7 @@ public class Configuration {
 		if (loadState == LoadState.LOADING)
 			throw new LoadPendingException();
 
-		return Optional.ofNullable(users.get(name));
+		return Optional.ofNullable(users.get(name.toLowerCase()));
 	}
 
 	public static User createUser(String name, int age) {
@@ -160,10 +160,10 @@ public class Configuration {
 			throw new NotYetLoadedException();
 		if (loadState == LoadState.LOADING)
 			throw new LoadPendingException();
-		if (users.containsKey(name))
+		if (users.containsKey(name.toLowerCase()))
 			throw new UserAlreadyExistsException(name);
 		User user = new User(name, Constants.AGE_TO_LEVEL_INDEX.applyAsInt(age));
-		users.put(name, user);
+		users.put(name.toLowerCase(), user);
 		return user;
 	}
 
