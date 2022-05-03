@@ -17,8 +17,8 @@ public class Spelling extends JFrame implements ActionListener {
 	JPanel practice;
 	JPanel correct;
 	JPanel incorrect;
-	Word word;
-	String guess;
+	JPanel settings;
+	JPanel levelmodification;
 
 	// JButton b1, b2, b3;
 	class LoginPage extends JPanel implements ActionListener {
@@ -56,7 +56,6 @@ public class Spelling extends JFrame implements ActionListener {
 			String name = txtName.getText().strip();
 			if (Configuration.userExists(name)) {
 				currentUser = Configuration.getUser(name).orElseThrow();
-				initializeUserDependentPages();
 				layout.show(contentPane, "home");
 			} else {
 				layout.show(contentPane, "age");
@@ -99,7 +98,6 @@ public class Spelling extends JFrame implements ActionListener {
 			String age = txtAge.getText().strip();
 			try {
 				currentUser = Configuration.createUser(tempUserName, Integer.parseInt(age));
-				initializeUserDependentPages();
 				layout.show(contentPane, "home");
 			} catch (NumberFormatException ignored) {
 
@@ -115,9 +113,6 @@ public class Spelling extends JFrame implements ActionListener {
 		JPanel topPanel, midPanel, btmPanel;
 
 		public Practice() {
-			Level level = currentUser.getLevel();
-			word = level.getNextWord();
-
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
@@ -126,7 +121,8 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel.add(btnQuit);
 			topPanel.add(Box.createHorizontalStrut(50));
 
-			user = new JLabel(currentUser.getName() + ", Level " + (currentUser.getLevelIndex() + 1));
+			// Retrieve username and level from Configuration class
+			user = new JLabel("TEMPORARY, Level: Temp");
 			topPanel.add(user);
 			this.add(topPanel);
 
@@ -161,16 +157,8 @@ public class Spelling extends JFrame implements ActionListener {
 
 			btmPanel.add(Box.createHorizontalStrut(70));
 			btnSubmit = new JButton("Submit");
-			btnSubmit.addActionListener(this);
-			btnSubmit.setActionCommand("submit");
 			btmPanel.add(btnSubmit);
 			this.add(btmPanel);
-		}
-
-		public void showNextWord() {
-			Level level = currentUser.getLevel();
-			word = level.getNextWord();
-			user.setText(currentUser.getName() + ", Level " + (currentUser.getLevelIndex() + 1));
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -178,16 +166,6 @@ public class Spelling extends JFrame implements ActionListener {
 			switch (e.getActionCommand()) {
 			case "quit":
 				layout.show(contentPane, "home");
-				break;
-			case "submit":
-				guess = enterSpelling.getText().strip().toLowerCase();
-				if (guess.equalsIgnoreCase(word.getWord())) {
-					layout.show(contentPane, "correct");
-				} else {
-					layout.show(contentPane, "incorrect");
-				}
-				showNextWord();
-				break;
 			}
 		}
 	}
@@ -203,6 +181,8 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
+            btnQuit.addActionListener(this);
+            btnQuit.setActionCommand("quit");
 			topPanel.add(btnQuit);
 			topPanel.add(Box.createHorizontalStrut(50));
 
@@ -222,6 +202,8 @@ public class Spelling extends JFrame implements ActionListener {
 			btmPanel.add(Box.createVerticalStrut(80));
 
 			btnCont = new JButton("Continue");
+			btnCont.addActionListener(this);
+            btnCont.setActionCommand("continue");
 			btnCont.setMaximumSize(new Dimension(250, 100));
 			btnCont.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btmPanel.add(btnCont);
@@ -230,7 +212,15 @@ public class Spelling extends JFrame implements ActionListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-
+			switch (e.getActionCommand()) {
+            case "quit":
+                    layout.show(contentPane, "home");
+                    break;
+                    
+            case "continue":
+                    layout.show(contentPane, "practice");
+                    break;
+            }
 		}
 	}
 
@@ -241,9 +231,12 @@ public class Spelling extends JFrame implements ActionListener {
 		JPanel topPanel, midPanel, btmPanel;
 
 		public IncorrectAnswer() {
+			System.out.println("Entered IncorrectAnswer constructor");
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
+			btnQuit.addActionListener(this);
+            btnQuit.setActionCommand("quit");
 			topPanel.add(btnQuit);
 			topPanel.add(Box.createHorizontalStrut(50));
 
@@ -259,11 +252,8 @@ public class Spelling extends JFrame implements ActionListener {
 			notQuite.setFont(new Font("Comfortaa", Font.BOLD, 15));
 			midPanel.add(notQuite);
 
-			// TODO make this thing happen in method called when guess is submitted
-			//SubstringRange incorrectPortion = word.getIncorrectPortion(guess);
-			spellingAttempt = new JLabel(/*"<html>" + guess.substring(0, incorrectPortion.getBeginIndex()) + "<u>"
-					+ guess.substring(incorrectPortion.getBeginIndex(), incorrectPortion.getEndIndex()) + "</u>"
-					+ guess.substring(incorrectPortion.getEndIndex()) + "</html>"*/);
+			// Retrieve the text from textfield and display errors
+			spellingAttempt = new JLabel("TEMPORARY");
 			spellingAttempt.setForeground(Color.RED);
 			spellingAttempt.setAlignmentX(Component.CENTER_ALIGNMENT);
 			midPanel.add(spellingAttempt);
@@ -293,6 +283,8 @@ public class Spelling extends JFrame implements ActionListener {
 			btmPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 			btmPanel.add(Box.createVerticalStrut(65));
 			btnGiveUp = new JButton("Give Up");
+			btnGiveUp.addActionListener(this);
+            btnGiveUp.setActionCommand("give up");
 			btmPanel.add(btnGiveUp);
 
 			btmPanel.add(Box.createHorizontalStrut(70));
@@ -302,48 +294,61 @@ public class Spelling extends JFrame implements ActionListener {
 		}
 
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
+			switch(e.getActionCommand()) {
+            case "quit":
+                    layout.show(contentPane, "home");
+                    break;
+                    
+            case "give up":
+                    layout.show(contentPane, "incorrect");
+                    break;
+            }
 
 		}
 	}
-
+	
 	class CompletePractice extends JPanel implements ActionListener {
-		JLabel user, completePractice, score;
-		JButton btnHome;
+	    JLabel user, completePractice, score;
+	    JButton btnHome;
+	    
+	    CompletePractice() {
+	      BoxLayout boxlayout = new BoxLayout(this, BoxLayout.Y_AXIS);
+	      this.setLayout(boxlayout);
 
-		CompletePractice() {
-			BoxLayout boxlayout = new BoxLayout(this, BoxLayout.Y_AXIS);
-			this.setLayout(boxlayout);
+	      //retrieve username and level from Configuration class
+	      user = new JLabel("TEMPORARY, Level: Temp");
+	      user.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      user.setFont(new Font("Comfortaa", Font.PLAIN, 15));
+	      this.add(user);
+	      this.add(Box.createVerticalStrut(70));
 
-			// retrieve username and level from Configuration class
-			user = new JLabel("TEMPORARY, Level: Temp");
-			user.setAlignmentX(Component.CENTER_ALIGNMENT);
-			user.setFont(new Font("Comfortaa", Font.PLAIN, 15));
-			this.add(user);
-			this.add(Box.createVerticalStrut(70));
+	      completePractice = new JLabel("Practice Complete!");
+	      completePractice.setFont(new Font("Comfortaa", Font.BOLD, 20));
+	      completePractice.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      this.add(completePractice);
+	      this.add(Box.createVerticalStrut(10));
 
-			completePractice = new JLabel("Practice Complete!");
-			completePractice.setFont(new Font("Comfortaa", Font.BOLD, 20));
-			completePractice.setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.add(completePractice);
-			this.add(Box.createVerticalStrut(10));
+	      //calculate score
+	      score = new JLabel("Score: temp");
+	      score.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      this.add(score);
+	      this.add(Box.createVerticalStrut(80));
 
-			// calculate score
-			score = new JLabel("Score: temp");
-			score.setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.add(score);
-			this.add(Box.createVerticalStrut(80));
+	      
+	      btnHome = new JButton("Back to Home");
+			
+          btnHome = new JButton("Back to Home");
+          btnHome.addActionListener(this);
+          btnHome.setActionCommand("home");
+	      btnHome.setMaximumSize(new Dimension(200, 50));
+	      btnHome.setAlignmentX(Component.CENTER_ALIGNMENT);
+	      this.add(btnHome);
+	    }
 
-			btnHome = new JButton("Back to Home");
-			btnHome.setMaximumSize(new Dimension(200, 50));
-			btnHome.setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.add(btnHome);
-		}
-
-		public void actionPerformed(ActionEvent e) {
-
-		}
-	}
+	    public void actionPerformed(ActionEvent e) {
+	    	layout.show(contentPane, "home");
+	    }
+	  }
 
 	class HomePage extends JPanel implements ActionListener {
 		JLabel lblWelcome, lblLevel;
@@ -368,7 +373,7 @@ public class Spelling extends JFrame implements ActionListener {
 
 			btnPractice = new JButton("Start Practicing");
 			btnPractice.addActionListener(this);
-			btnPractice.setActionCommand("start");
+            btnPractice.setActionCommand("practice");
 			btnPractice.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnPractice.setFont(new Font("Comfortaa", Font.PLAIN, 20));
 			btnPractice.setMaximumSize(new Dimension(250, 100));
@@ -376,6 +381,8 @@ public class Spelling extends JFrame implements ActionListener {
 			this.add(Box.createVerticalStrut(25));
 
 			btnSettings = new JButton("Settings");
+			btnSettings.addActionListener(this);
+            btnSettings.setActionCommand("settings");
 			btnSettings.setAlignmentX(Component.CENTER_ALIGNMENT);
 			btnSettings.setMaximumSize(new Dimension(150, 40));
 			this.add(btnSettings);
@@ -383,14 +390,16 @@ public class Spelling extends JFrame implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			/*
-			 * layout.show(contentPane, indexOfPanel) indexOfPanel refers to the panel at
-			 * the position of the specified index
-			 */
-			switch (e.getActionCommand()) {
-			case "start":
-				layout.show(contentPane, "practice");
-			}
+			switch(e.getActionCommand()) {
+            case "practice" :
+                    layout.show(contentPane, "practice");
+                    break;
+                    
+            case "settings" :
+                    layout.show(contentPane, "settings");
+                    break;
+            }
+
 		}
 
 	}
@@ -406,6 +415,9 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel = new JPanel();
 			topPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 			home = new JButton("Home");
+			home.addActionListener(this);
+            home.setActionCommand("home");
+
 
 			topPanel.add(home);
 			topPanel.add(Box.createHorizontalStrut(30));
@@ -415,7 +427,7 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel.add(user);
 			topPanel.add(Box.createHorizontalStrut(50));
 			this.add(topPanel);
-
+	
 			middlePanel = new JPanel();
 			this.add(Box.createHorizontalStrut(30));
 			middlePanel.setLayout(new BoxLayout(middlePanel, BoxLayout.Y_AXIS));
@@ -445,8 +457,11 @@ public class Spelling extends JFrame implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-
+			 switch(e.getActionCommand()) {
+             case "home":
+             // TODO Auto-generated method stub
+                     layout.show(contentPane, "home");
+             }
 		}
 
 	}
@@ -560,7 +575,20 @@ public class Spelling extends JFrame implements ActionListener {
 		contentPane.add(login, "login");
 		age = new AgePrompt();
 		contentPane.add(age, "age");
+		home = new HomePage();
+		contentPane.add(home, "home");
+		practice = new Practice();
+		contentPane.add(practice, "practice");
+		correct = new CorrectAnswer();
+		contentPane.add(correct, "correct");
+		incorrect = new IncorrectAnswer();
+		contentPane.add(incorrect, "incorrect");
+		settings = new SettingsPage();
+        contentPane.add(settings, "settings");
+        levelmodification = new LevelModificationPage();
+        contentPane.add(levelmodification, "levelmodification");
 		layout.show(contentPane, "login");
+		
 		/*
 		 * b1 = new JButton("Login Page"); b2 = new JButton("Practice"); b3 = new
 		 * JButton("Settings");
@@ -575,19 +603,10 @@ public class Spelling extends JFrame implements ActionListener {
 
 	}
 
-	public void initializeUserDependentPages() {
-		home = new HomePage();
-		contentPane.add(home, "home");
-		practice = new Practice();
-		contentPane.add(practice, "practice");
-		correct = new CorrectAnswer();
-		contentPane.add(correct, "correct");
-		incorrect = new IncorrectAnswer();
-		contentPane.add(incorrect, "incorrect");
-	}
-
 	public static void runGUI() {
+		System.out.println("Enter runGUI");
 		Spelling cl = new Spelling();
+		System.out.println("Finished Spelling constructor");
 		cl.setSize(400, 400);
 		cl.setVisible(true);
 		cl.setDefaultCloseOperation(EXIT_ON_CLOSE);
