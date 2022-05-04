@@ -175,6 +175,15 @@ public class Configuration {
 
 		return levels.get(levelIndex);
 	}
+	
+	public static Level[] getLevels() {
+		if (loadState == LoadState.NOT_LOADED)
+			throw new NotYetLoadedException();
+		if (loadState == LoadState.LOADING)
+			throw new LoadPendingException();
+		
+		return levels.toArray(Level[]::new);
+	}
 
 	public static void addLevelBefore(int levelIndex) {
 		if (loadState == LoadState.NOT_LOADED)
