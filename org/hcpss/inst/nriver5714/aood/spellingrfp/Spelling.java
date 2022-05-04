@@ -11,14 +11,14 @@ public class Spelling extends JFrame implements ActionListener {
 	Container contentPane;
 	User currentUser;
 	String tempUserName;
-	JPanel login;
-	JPanel age;
-	JPanel home;
-	JPanel practice;
-	JPanel correct;
-	JPanel incorrect;
-	JPanel settings;
-	JPanel levelmodification;
+	LoginPage login;
+	AgePrompt age;
+	HomePage home;
+	Practice practice;
+	CorrectAnswer correct;
+	IncorrectAnswer incorrect;
+	SettingsPage settings;
+	LevelModificationPage levelmodification;
 	Word word;
 	String guess;
 
@@ -185,8 +185,10 @@ public class Spelling extends JFrame implements ActionListener {
 			case "submit":
 				guess = enterSpelling.getText().strip().toLowerCase();
 				if (guess.equalsIgnoreCase(word.getWord())) {
+					correct.refresh();
 					layout.show(contentPane, "correct");
 				} else {
+					incorrect.refresh();
 					layout.show(contentPane, "incorrect");
 				}
 				showNextWord();
@@ -198,6 +200,8 @@ public class Spelling extends JFrame implements ActionListener {
 	class CorrectAnswer extends JPanel implements ActionListener {
 
 		private static final long serialVersionUID = -1972509954050125796L;
+		private final String[] CONGRATZ_MESSAGES = { "Good Job!", "Well done!", "Impressive!", "Outstanding!",
+				"Keep it up!" };
 		JLabel user, lblCongratz;
 		JButton btnQuit, btnCont;
 		JPanel topPanel, btmPanel;
@@ -220,7 +224,7 @@ public class Spelling extends JFrame implements ActionListener {
 			btmPanel.setLayout(new BoxLayout(btmPanel, BoxLayout.Y_AXIS));
 			btmPanel.add(Box.createVerticalStrut(50));
 
-			lblCongratz = new JLabel("Good Job!");
+			lblCongratz = new JLabel(CONGRATZ_MESSAGES[(int) (Math.random() * CONGRATZ_MESSAGES.length)]);
 			lblCongratz.setAlignmentX(Component.CENTER_ALIGNMENT);
 			lblCongratz.setFont(new Font("Comfortaa", Font.PLAIN, 30));
 			btmPanel.add(lblCongratz);
@@ -234,6 +238,10 @@ public class Spelling extends JFrame implements ActionListener {
 			btmPanel.add(btnCont);
 			this.add(btmPanel);
 
+		}
+
+		public void refresh() {
+			lblCongratz.setText(CONGRATZ_MESSAGES[(int) (Math.random() * CONGRATZ_MESSAGES.length)]);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -276,15 +284,8 @@ public class Spelling extends JFrame implements ActionListener {
 			notQuite.setFont(new Font("Comfortaa", Font.BOLD, 15));
 			midPanel.add(notQuite);
 
-			// TODO make this thing happen in method called when guess is submitted
-			// SubstringRange incorrectPortion = word.getIncorrectPortion(guess);
-			spellingAttempt = new JLabel(/*
-											 * "<html>" + guess.substring(0, incorrectPortion.getBeginIndex()) + "<u>" +
-											 * guess.substring(incorrectPortion.getBeginIndex(),
-											 * incorrectPortion.getEndIndex()) + "</u>" +
-											 * guess.substring(incorrectPortion.getEndIndex()) + "</html>"
-											 */);
-			spellingAttempt.setForeground(Color.RED);
+			spellingAttempt = new JLabel();
+			// spellingAttempt.setForeground(Color.RED);
 			spellingAttempt.setAlignmentX(Component.CENTER_ALIGNMENT);
 			midPanel.add(spellingAttempt);
 			midPanel.add(Box.createVerticalStrut(5));
@@ -321,6 +322,14 @@ public class Spelling extends JFrame implements ActionListener {
 			btnSubmit = new JButton("Submit");
 			btmPanel.add(btnSubmit);
 			this.add(btmPanel);
+		}
+
+		public void refresh() {
+			SubstringRange incorrectPortion = word.getIncorrectPortion(guess);
+			spellingAttempt.setText(
+					"<html>" + guess.substring(0, incorrectPortion.getBeginIndex()) + "<u style=\"color: red\">"
+							+ guess.substring(incorrectPortion.getBeginIndex(), incorrectPortion.getEndIndex()) + "</u>"
+							+ guess.substring(incorrectPortion.getEndIndex()) + "</html>");
 		}
 
 		public void actionPerformed(ActionEvent e) {
