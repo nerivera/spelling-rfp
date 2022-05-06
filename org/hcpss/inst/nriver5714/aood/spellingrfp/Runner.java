@@ -4,15 +4,20 @@ import java.io.FileNotFoundException;
 
 public class Runner {
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
-		try {
-			Configuration.load(Spelling::runGUI);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	@SuppressWarnings("serial")
+	public static class TooManyArgumentsException extends IllegalArgumentException {
+		public TooManyArgumentsException(int numArgsPassed) {
+			super("too many arguments; " + numArgsPassed + " arguments passed, no more than 1 argument expected");
 		}
+	}
+
+	public static void main(String[] args) throws FileNotFoundException {
+		if (args.length == 0)
+			Configuration.load(Spelling::runGUI);
+		else if (args.length == 1)
+			Configuration.load(args[0], Spelling::runGUI);
+		else
+			throw new TooManyArgumentsException(args.length);
 	}
 
 }
