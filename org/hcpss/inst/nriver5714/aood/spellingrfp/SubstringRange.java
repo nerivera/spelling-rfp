@@ -12,7 +12,7 @@ public class SubstringRange {
 		this.endIndex = endIndex;
 	}
 	public boolean isEmpty() {
-		return (getBeginIndex() == -1);
+		return this.getBeginIndex() == this.getEndIndex();
 	}
 	public int getBeginIndex() {
 		return this.beginIndex;
