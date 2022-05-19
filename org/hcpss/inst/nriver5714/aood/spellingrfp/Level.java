@@ -64,6 +64,10 @@ public class Level {
 		return it.next();
 	}
 	
+	public int size() {
+		return words.size();
+	}
+	
 	@Override
 	public String toString() {
 		return words.values().toString();

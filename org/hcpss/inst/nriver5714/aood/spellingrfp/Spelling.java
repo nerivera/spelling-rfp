@@ -3,6 +3,9 @@ package org.hcpss.inst.nriver5714.aood.spellingrfp;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 
 //Temporary setup for Spelling class
 public class Spelling extends JFrame implements ActionListener {
@@ -149,6 +152,8 @@ public class Spelling extends JFrame implements ActionListener {
 			btnSound = new JButton(icon);
 			// btnSound.setOpaque(false);
 			btnSound.setAlignmentX(Component.CENTER_ALIGNMENT);
+			btnSound.addActionListener(this);
+			btnSound.setActionCommand("sound");
 			midPanel.add(btnSound);
 
 			midPanel.add(Box.createVerticalStrut(10));
@@ -198,6 +203,19 @@ public class Spelling extends JFrame implements ActionListener {
 			switch (e.getActionCommand()) {
 			case "quit":
 				layout.show(contentPane, "home");
+				break;
+			case "sound":
+				try{
+				    AudioInputStream audioInputStream =
+				        AudioSystem.getAudioInputStream(
+				            this.getClass().getResource("assets/audio/pronunciations/man.mp3"));
+				    Clip clip = AudioSystem.getClip();
+				    clip.open(audioInputStream);
+				    clip.start();
+				}
+				catch(Exception ex)
+				{
+				}
 				break;
 			case "submit":
 				guess = enterSpelling.getText().strip().toLowerCase();
