@@ -3,6 +3,8 @@ package org.hcpss.inst.nriver5714.aood.spellingrfp;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -205,16 +207,15 @@ public class Spelling extends JFrame implements ActionListener {
 				layout.show(contentPane, "home");
 				break;
 			case "sound":
-				try{
-				    AudioInputStream audioInputStream =
-				        AudioSystem.getAudioInputStream(
-				            this.getClass().getResource("assets/audio/pronunciations/man.mp3"));
-				    Clip clip = AudioSystem.getClip();
-				    clip.open(audioInputStream);
-				    clip.start();
-				}
-				catch(Exception ex)
-				{
+				try {
+					String soundName = "assets/audio/pronunciations/man.wav";
+					AudioInputStream audioInputStream = AudioSystem
+							.getAudioInputStream(new File(soundName).getAbsoluteFile());
+					Clip clip = AudioSystem.getClip();
+					clip.open(audioInputStream);
+					clip.start();
+				} catch (Exception ex) {
+					ex.printStackTrace();
 				}
 				break;
 			case "submit":
