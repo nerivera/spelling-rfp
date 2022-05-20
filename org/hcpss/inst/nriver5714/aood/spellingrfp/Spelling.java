@@ -27,6 +27,8 @@ public class Spelling extends JFrame implements ActionListener {
 	LevelModificationPage levelmodification;
 	Word word;
 	String guess;
+	CompletePractice complete;
+	int score;
 
 	// JButton b1, b2, b3;
 	class LoginPage extends JPanel implements ActionListener {
@@ -134,8 +136,7 @@ public class Spelling extends JFrame implements ActionListener {
 			topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
 			btnQuit = new JButton("Quit Practice");
-			btnQuit.addActionListener(this);
-			btnQuit.setActionCommand("quit");
+			btnQuit.setEnabled(false);
 			topPanel.add(btnQuit);
 			topPanel.add(Box.createHorizontalStrut(50));
 
@@ -203,9 +204,6 @@ public class Spelling extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			// TODO Auto-generated method stub
 			switch (e.getActionCommand()) {
-			case "quit":
-				layout.show(contentPane, "home");
-				break;
 			case "sound":
 				try {
 					String soundName = "assets/audio/pronunciations/man.wav";
@@ -224,6 +222,7 @@ public class Spelling extends JFrame implements ActionListener {
 					guess(guess);
 				break;
 			case "give up":
+				score -= 1;
 				giveUp.refresh();
 				layout.show(contentPane, "give up");
 			}
@@ -280,7 +279,8 @@ public class Spelling extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			switch (e.getActionCommand()) {
 			case "quit":
-				layout.show(contentPane, "home");
+				complete.updateScore();
+				layout.show(contentPane, "complete");
 				break;
 
 			case "continue":
@@ -381,7 +381,8 @@ public class Spelling extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			switch (e.getActionCommand()) {
 			case "quit":
-				layout.show(contentPane, "home");
+				complete.updateScore();
+				layout.show(contentPane, "complete");
 				break;
 			case "submit":
 				guess = enterSpelling.getText().strip().toLowerCase();
@@ -444,7 +445,8 @@ public class Spelling extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			switch (e.getActionCommand()) {
 			case "quit":
-				layout.show(contentPane, "home");
+				complete.updateScore();
+				layout.show(contentPane, "complete");
 				break;
 
 			case "continue":
@@ -456,7 +458,7 @@ public class Spelling extends JFrame implements ActionListener {
 	}
 
 	class CompletePractice extends JPanel implements ActionListener {
-		JLabel user, completePractice, score;
+		JLabel user, completePractice, scoreLabel;
 		JButton btnHome;
 
 		CompletePractice() {
@@ -477,9 +479,9 @@ public class Spelling extends JFrame implements ActionListener {
 			this.add(Box.createVerticalStrut(10));
 
 			// calculate score
-			score = new JLabel("Score: temp");
-			score.setAlignmentX(Component.CENTER_ALIGNMENT);
-			this.add(score);
+			scoreLabel = new JLabel("Score: " + score);
+			scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+			this.add(scoreLabel);
 			this.add(Box.createVerticalStrut(80));
 
 			btnHome = new JButton("Back to Home");
@@ -490,6 +492,10 @@ public class Spelling extends JFrame implements ActionListener {
 			btnHome.setMaximumSize(new Dimension(200, 50));
 			btnHome.setAlignmentX(Component.CENTER_ALIGNMENT);
 			this.add(btnHome);
+		}
+
+		public void updateScore() {
+			scoreLabel.setText("Score: " + score);
 		}
 
 		public void actionPerformed(ActionEvent e) {
@@ -537,6 +543,7 @@ public class Spelling extends JFrame implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			switch (e.getActionCommand()) {
 			case "practice":
+				score = 0;
 				practice.showNextWord();
 				layout.show(contentPane, "practice");
 				break;
@@ -711,7 +718,6 @@ public class Spelling extends JFrame implements ActionListener {
 	}
 
 	public Spelling() {
-
 		contentPane = getContentPane();
 		layout = new CardLayout(10, 20);
 
@@ -740,13 +746,17 @@ public class Spelling extends JFrame implements ActionListener {
 		contentPane.add(settings, "settings");
 		levelmodification = new LevelModificationPage();
 		contentPane.add(levelmodification, "levelmodification");
+		complete = new CompletePractice();
+		contentPane.add(complete, "complete");
 	}
 
 	private void guess(String guess) {
 		if (guess.equalsIgnoreCase(word.getWord())) {
+			score += 2;
 			correct.refresh();
 			layout.show(contentPane, "correct");
 		} else {
+			score -= 1;
 			incorrect.refresh();
 			layout.show(contentPane, "incorrect");
 		}
